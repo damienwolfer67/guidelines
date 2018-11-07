@@ -3,28 +3,32 @@
 _Bonnes pratiques CSS (et SCSS)  en production_
 
 
-## Généralités
+## Généralités : encodage, indentation, typographie
 
-* L’encodage des fichiers et des bases de données doit se faire en UTF-8 (sans BOM).
-* Les indentations se font à l’aide de deux espaces et sous forme de tabulations.
+* **L’encodage** des fichiers et des bases de données doit se faire en UTF-8 (sans BOM).
+* Les **indentations** se font à l’aide de deux espaces et sous forme de tabulations.
 Pour assurer une cohérence inter-projets, utiliser la convention [EditorConfig](http://editorconfig.org/).
 * Le code CSS produit doit être propre, optimisé et (autant que faire se peut) valide selon les normes (http://jigsaw.w3.org/css-validator/).
 * La feuille de style CSS est de préférence unique et minifiée et appelée à l'aide d'un élément `<link>` dans la section `<head>`. Pas de `@import` dans un fichier CSS.
-* Privilégier tant que possible les syntaxes via propriétés raccourcies : `margin`, `padding`, `font`, `border`, `background`, `border-radius`
+* Toujours utiliser des guillemets pour les valeurs dans les sélecteurs, exemple : `input[type="checkbox"]`
 * Utiliser toujours le même type de guillemets. De préférence des doubles guillemets, exemple : `content: ""`;
-* Utiliser toujours des guillemets pour les valeurs dans les sélecteurs, exemple : `input[type="checkbox"]`
 * Éviter de spécifier les unités pour les valeurs nulles ainsi que pour les hauteurs de lignes, exemple : `margin: 0; line-height: 1.5`.
 
-## Patterns visuels (OOCSS)
+## Conventions pratiques générales
 
-Repérer systématiquement les « objets CSS », c'est-à-dire des « patterns visuels » qui se répètent, afin de définir ainsi des classes réutilisables, des styles de base et des variantes.
-* Privilégier au maximum l'usage de classes plutôt que d'écrire des sélecteurs basés sur le type des éléments ou leur `id` [CSS with only class names](http://www.drinchev.com/blog/css-with-only-class-names/)
-* Séparer la structure de l’apparence (une règle CSS ne doit pas comporter à la fois `padding` et `background` par exemple)
-* Séparer le conteneur du contenu (un composant ne doit jamais être ciblé par un sélecteur qui tient compte de son parent)
-* Utiliser au maximum le pattern objet "media" : [http://codepen.io/raphaelgoetter/pen/KMWWwj?editors=1100](http://codepen.io/raphaelgoetter/pen/KMWWwj?editors=1100)
-* Utiliser au maximum le pattern objet "autogrid" : [http://codepen.io/raphaelgoetter/pen/KMgBJd?editors=1100](http://codepen.io/raphaelgoetter/pen/KMgBJd?editors=1100)
-
-Documentation : [http://www.nicoespeon.com/fr/2013/05/plongee-au-coeur-de-oocss/](http://www.nicoespeon.com/fr/2013/05/plongee-au-coeur-de-oocss/)
+* **Priorité aux classes :** Privilégiez au maximum l'usage de sélecteurs de classes plutôt que des sélecteurs basés sur les noms des balises ou leur  id.
+* **Nommage des classes :** Choisissez des noms de composants fonctionnels réutilisables (ex.  `alert`), des noms de sous-éléments préfixés par leur parent (ex.  `alert-title`) et des variantes facilement distinguables (ex.  `alert-title--alternate`). En Sass, le sélecteur de parent `&` est parfait pour ce rôle.
+* **Séparez la structure de l’apparence** (une règle CSS ne doit pas comporter à la fois  padding et  background par exemple). Prévoyez des styles de base réutilisables, puis des classes de variantes graphiques (classes utilitaires).
+* **Séparez le conteneur du contenu** (un composant ne doit jamais être ciblé par un sélecteur qui tient compte de son parent) Par exemple, n'écrivez pas  `.sidebar .button` mais  `.button--primary`
+* **Variables :** rédigez les noms de variables en minuscule, en anglais et les mots composés séparés d'un trait d'union. 
+  * La "fonction" de la variable apparaît en premier, puis sa "variante" (ex. `$color-primary` et non `$primary-color`)
+  * Exception pour les variables spécifiques à un composant où le nom du composant apparaît en premier (ex.  `$checkbox-size` plutôt que  `$size-checkbox`)
+* **Couleurs :** Employez systématiquement une variable pour désigner vos couleurs au sein des projets. Même pour les couleurs nommées telles que `white` ou `black`
+* **Points de rupture :** optez pour la méthodologie "Mobile First" et appliquez de préférence des media queries de ce type :
+  * `@media (min-width: $breakpoint)`
+  * Si vous deviez choisir un intervalle maximum, optez pour  `@media (max-width: ($breakpoint - 1))` pour éviter les chevauchements
+* **Classes utilitaires :** KNACSS propose quelques classes utilitaires telles que  `.mt0`,  `.u-txt-center`,  `.u-italic`, `.u-clear` etc. mais il est préférable de ne pas en abuser. Évitez d'accumuler les classes sur un même élément
+* Utilisez au maximum les modèles et composants réutilisables tels que les objet "media" et "autogrid." (dans KNACSS, voir fichiers dans `/sass/components/`)
 
 ## Reset
 
@@ -58,8 +62,8 @@ Voici dans quel ordre nous déclarons nos propriétés :
 2. Propriété display : tout ce qui affecte le rendu par défaut de l’élément (`none`, `block`, `inline`, `inline-block`, `flex`, `grid`, &hellip;).
 3. Positionnement : tout ce qui détermine la position de l’élément (`position`, `float`, `top`, `right`, `bottom`, `left`, `vertical-align`, `z-index`, `clear`).
 4. Modèle de boîte : tout ce qui influe sur les dimensions de l’élément (`width`, `height`, `min-width`, `min-height`, `max-width`, `max-height`, `margin`, `padding`, `border`, `overflow`).
-4. Transformations et transitions : propriétés et valeurs CSS 3 (`transform`, `transition`, `animation`).
-5. Typographie : tout ce qui détermine les caractéristiques de la police de caractères (`font`, `text-align`, `text-decoration`, `letter-spacing`, `text-indent`, `line-height`, `text-transform`, `white-space`, `word-wrap`).
+5. Transformations et transitions : propriétés et valeurs CSS 3 (`transform`, `transition`, `animation`).
+6. Typographie : tout ce qui détermine les caractéristiques de la police de caractères (`font`, `text-align`, `text-decoration`, `letter-spacing`, `text-indent`, `line-height`, `text-transform`, `white-space`, `word-wrap`).
 Décoration : les propriétés purement ornementales (`background`, `color`, `list-style`, `outline`).
 
 
