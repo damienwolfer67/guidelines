@@ -68,13 +68,13 @@ FALSE
 NULL
 ```
 
-Les noms de classes doivent débuter par une majuscule. Les méthodes doivent être écrites en minuscules avec des termes séparés par underscore.
+Les noms de classes doivent débuter par une majuscule. Les méthodes doivent être écrites en camelCase.
 
 ```
-class Super_class {
+class SuperClass {
   function __construct() {
   }
-  function get_file_properties() {
+  function getFileProperties() {
   }
 }
 ```
